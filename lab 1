@@ -1,0 +1,98 @@
+#include <iostream>
+#include <iomanip>
+#include <stdio.h>
+using namespace std;
+
+double mpow(float x, int power) {
+	double answ = x;
+	for (int i = 1; i < power; i++) {
+		answ *= x;
+	}
+	return answ;
+}
+
+double count1(float x) {
+	double fir = 9.103 * mpow(x, 9) + 5.41 * mpow(x, 8) + 23.322 * mpow(x, 1);
+	double sec = 3218.5325322 * mpow(x, 5) - 53.3424 * mpow(x, 3) + 6.54 * mpow(x, 4);
+	return fir * sec;
+}
+
+double count2(float x) {
+
+	// 23
+	double p1_23 = 9.103 * mpow(x, 1) + 5.41;
+	cout << "\n\nP1 (23) " << p1_23 << endl;
+
+	double p2_23 = p1_23 * mpow(x, 7) + 23.322;
+	cout << "P2 (23): " << p2_23 << endl;
+
+	double p3_23 = p2_23 * mpow(x, 1);
+	cout << "P3 (23): " << p3_23 << endl;
+
+
+	// 39
+
+	double p1_39 = 3218.5325322 * mpow(x, 1) + 6.54;
+	cout << "P1 (39): " << p1_39 << endl;
+
+	double p2_39 = p1_39 * mpow(x, 1) + 53.3424;
+	cout << "P2 (39): " << p2_39 << endl;
+
+	double p3_39 = p2_39 * mpow(x, 3);
+	cout << "P3 (39): " << p3_39 << endl;
+
+	return p3_23 * p3_39;
+}
+
+double count3(float x) {
+
+	// 23
+	double p1_23 = 9.103 * mpow(x, 1) + 5.41;
+	printf("\n\nP1 (23): %f \n", p1_23);
+
+	double p2_23 = p1_23 * mpow(x, 7) + 23.322;
+	printf("P2 (23): %f \n", p2_23);
+
+	double p3_23 = p2_23 * mpow(x, 1);
+	printf("P3 (23): %f \n", p3_23);
+
+	// 39
+
+	double p1_39 = 3218.5325322 * mpow(x, 1) + 6.54;
+	printf("P1 (39): %f \n", p1_39);
+
+	double p2_39 = p1_39 * mpow(x, 1) + 53.3424;
+	printf("P2 (39): %f \n", p2_39);
+
+	double p3_39 = p2_39 * mpow(x, 3);
+	printf("P3 (39): %f \n", p3_39);
+
+	return p3_23 * p3_39;
+}
+
+int main()
+{
+
+	setlocale(LC_ALL, "Russian");
+
+	// Информация
+	cout << "Автор: Гранин Владислав Анатольевич \nГруппа: 1309 \nВерсия : 1.1.0 \nДата создания : 28.09.2021 \nДата сдачи : 29.09.2021";
+
+	// Введение X
+
+	float x;
+	cout << "\n Введите x +-(10^-10; 10^10): ";
+	cin >> x;
+
+	// x = scanf_s("%f", &x);
+
+	cout << "\n\n" << "Формула 23: 9.103x^9 + 5.41x^8 + 23.322x  \nФормула 39: 3218.5325322x^5 + 53.3424x^3 + 6.54x^4 \n\n";
+
+	// Единая формула
+
+	cout << "Ответ по единой формуле (1): " << setprecision(7) << count1(x);
+	cout << "Ответ по единой формуле (2): " << setprecision(9) << count2(x);
+	cout << "Ответ по единой формуле (3): " << setprecision(18) << count3(x);
+
+	return 1;
+}
