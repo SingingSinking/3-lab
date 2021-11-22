@@ -1,0 +1,47 @@
+#include <iostream>
+#include <iomanip>
+#include <fstream>
+#include <cmath>
+using namespace std;
+int main() {
+	setlocale(0, "");
+	double a, s, T;
+	int i;
+	cout << "Здравствуйте, данную лабораторную работ выполнил Гранин Владислав Анатольевич, группа 1309"
+		<< '\n' << "Начало: 17.11.2021 8"
+		<< '\n' << "Задание 3:"
+		<< '\n' << "Условие задания: Среди чисел 1, 1+1/2, 1+1/2+1/3,... найти первое число, которое больше заданного числа T."
+		<< '\n' << "Найти: s > T" << '\n';
+	cout << "Введите: T (T>0)";
+	cin >> T;
+	i = 0;
+	while (T < 0 && i < 3) {
+		cout << "T < 0, попробуйте ввести другое значение T" << '\n';
+		cin >> T;
+		i++;
+	} if (T < 0 && i >= 3) cout << "error" << '\n';
+	else {
+		i = 0;
+		s = 0;
+		a = 0;
+		cout << "_i___|_____a______________________|_____s__________________________________________________\n";
+		cout << left << scientific << setw(5) << i << "|"
+
+			 << setw(28) << setprecision(15) << a << "|"
+
+			 << setw(60) << setprecision(35) << s << '\n';
+		i = 1;
+		while (s < T) {
+			s +=(float) 1 / i;
+			a = (float)1 / i;
+			cout << left << scientific << setw(5) << i << "|"
+
+				<< setw(28) << setprecision(15) << a << "|"
+
+				<< setw(60) << setprecision(35) << s << '\n';
+			i++;
+		}
+		cout << s << '\n' << (i-1);
+	} 
+	return 0;
+}
