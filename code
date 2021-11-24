@@ -3,6 +3,7 @@
 #include <fstream>
 #include <cmath>
 using namespace std;
+fstream f;
 int main() {
 	setlocale(0, "");
 	double a, s, T;
@@ -27,13 +28,18 @@ int main() {
 		cout << "_i___|_____a______________________|_____s__________________________________________________\n";
 		cout << left << scientific << setw(5) << i << "|"
 
-			 << setw(28) << setprecision(15) << a << "|"
+			<< setw(28) << setprecision(15) << a << "|"
 
-			 << setw(60) << setprecision(35) << s << '\n';
+			<< setw(60) << setprecision(35) << s << '\n';
 		i = 1;
-		while (s < T) {
-			s +=(float) 1 / i;
+		while ((s < T) && (i < 1000)) {
+			s += (float)1 / i;
 			a = (float)1 / i;
+			if (i % 20 == 0 && i > 0) {
+
+				cout << "_i___|_____a______________________|_____s__________________________________________________\n";
+
+			}
 			cout << left << scientific << setw(5) << i << "|"
 
 				<< setw(28) << setprecision(15) << a << "|"
@@ -41,7 +47,36 @@ int main() {
 				<< setw(60) << setprecision(35) << s << '\n';
 			i++;
 		}
-		cout << s << '\n' << (i-1);
-	} 
-	return 0;
+		cout << "Суммарное всех членов последовательности: " << s << '\n'
+			<< "Последний член последовательности: " << a << '\n'
+			<< "Кол-во членов последовательности: " << (i - 1);
+
+		f.open("Lab3.txt", ios::out);
+		i = 0;
+		s = 0;
+		a = 0;
+		f << "_i___|_____a______________________|_____s__________________________________________________\n";
+		f << left << scientific << setw(5) << i << "|"
+
+			<< setw(28) << setprecision(15) << a << "|"
+
+			<< setw(60) << setprecision(35) << s << '\n';
+		i = 1;
+		while ((s < T) && (i < 1000)) {
+			s += (float)1 / i;
+			a = (float)1 / i;
+			f << left << scientific << setw(5) << i << "|"
+
+				<< setw(28) << setprecision(15) << a << "|"
+
+				<< setw(60) << setprecision(35) << s << '\n';
+			i++;
+		}
+		f << "Суммарное всех членов последовательности: " << s << '\n'
+			<< "Последний член последовательности: " << a << '\n'
+			<< "Кол-во членов последовательности: " << (i - 1);
+		f.close();
+	}
+		return 0;
+
 }
