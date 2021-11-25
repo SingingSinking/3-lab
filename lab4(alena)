@@ -1,0 +1,96 @@
+#include <iostream>
+#include <iomanip>
+#include <math.h>
+#include <fstream>
+#include <algorithm>
+#include <string>
+
+using namespace std;
+int main()
+{
+	setlocale(LC_ALL, "Russian");
+	cout << "Автор: Коваль Алёна Александровна \nГруппа: 1309." << endl << "Версия 4.1.1 " << endl << "Дата создания работы : 20.11.2021" << endl << "Дата защиты работы: хх.хх.хххх" << endl;
+
+	cout << "Для последовательности из n вещественных значений ai вычислить:" << endl;
+
+	cout << "S= sqrt(a1)+ sqrt(a1+a2)+ sqrt(a1+a2+***+an)" << endl << endl;
+	const unsigned size = 100;
+	unsigned i, kolvo;
+	float a[size];
+	fstream f, f1;
+
+	f.open("vvod.txt", ios::in);
+	if (f.is_open() == 0) {
+		cout << "I can't open it\n";
+		return 0;
+	}
+	else {
+		cout << "Everything is ok. Continue\n";
+		cout << "Контрольный пример:" << endl;
+		f >> kolvo;
+		if (kolvo < 0) {
+			kolvo = 0;
+		}
+		else if (kolvo > size) {
+			kolvo = size;
+		}
+		i = 0;
+		while (1) {
+			f >> a[i];
+			cout << a[i] << endl;
+			f1 << a[i] << endl;
+			i++;
+			if (f.eof()) break;
+			if (i >= kolvo) break;
+		}
+		kolvo = i;
+	}
+	f.close();
+
+	float summ = 0;
+
+	f1.open("vivod.txt", ios::out);
+
+	if (f1.is_open() == 0) {
+
+		cout << "Error with opening. Make smth\n";
+
+
+		return 0;
+
+	}
+
+	else {
+		f1 << "Контрольный пример: " << '\n';
+		f.open("vvod.txt", ios::in);
+		string x;
+		while (getline(f, x)) {
+			f1 << x << endl;
+		} f.close();
+		float summ = 0;
+		float el = 1;
+
+
+
+		for (i = 0; i < kolvo; i++) {
+
+			el *= sqrt(a[i]);
+			summ += el;
+
+		}
+
+		while (1) {
+			f >> a[i];
+			i++;
+			if (f.eof()) break;
+			if (i >= kolvo) break;
+		}
+
+		f1 << "Количество чисел = " << kolvo << endl << "Значение выражения = " << summ << endl;
+
+		cout << "Количество чисел = " << kolvo << endl << "Значение выражения = " << summ << endl;
+
+		f1.close();
+
+	}
+}
