@@ -1,0 +1,68 @@
+#include <iostream>
+#include <fstream>
+#include <iomanip>
+#include <math.h>
+#include <string>
+using namespace std;
+int main()
+{
+	setlocale(LC_ALL, "Russian");
+	unsigned i, T;
+	const  unsigned size = 100;
+	float a[size], B;
+	fstream f, f1;
+	//f - ввод
+	//f1 - вывод
+	cout << "Введите ограничение для элементов(B)1: " << '\n';
+	cin >> B;
+
+	f.open("vvod.txt", ios::in);
+	if (f.is_open() == 0) {
+		cout << "Error f\n";
+		return 0;
+	}
+	else {
+		cout << "Good. Continue. f\n";
+		
+		f >> T;
+		if (T < 0) {
+			T = 0;
+		}
+		else if (T > size) {
+			T = size;
+		}
+		i = 0;
+		while (1) {
+			f >> a[i];
+			i++;
+			if (f.eof()) break;
+			if (i >= T) break;
+		}
+		T = i;
+		
+	} f.close();
+
+	float sum = 0;
+	int plus = 0;
+	f1.open("vivod.txt", ios::out);
+	if (f1.is_open() == 0) {
+		cout << "Error f1" << '\n';
+		return 0;
+	}
+	else
+	{
+		cout << "Good. Continue. f1" << '\n';
+		f1 << "Кол-во элементов: " << T << endl;
+		cout << "Кол-во элементов: " << T << endl;
+		for (i = 0; i <= T; i++) {
+			if (a[i] > B) {
+				sum += a[i];
+			}
+		}
+		f1 << "Массив: ";
+		for (int i = 0; i < T; i++) f1 << a[i] << " " ;
+		f1 << '\n' << "Сумма: " << sum << endl;
+		cout << "Сумма: " << sum << endl;
+
+	} f1.close();
+}
