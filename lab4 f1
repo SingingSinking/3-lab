@@ -7,14 +7,20 @@
 using namespace std;
 int main()
 {
+	
 	setlocale(LC_ALL, "Russian");
+	cout << "Здравствуйте, данную лабораторную работ выполнил Гранин Владислав Анатольевич, группа 1309"
+		<< '\n' << "Начало: 17.11.2021"
+		<< '\n' << "Задание 4:" << '\n' << "Версия 4.0.1" << '\n'
+		<< '\n' << "Условие задания: Найти сумму всех элементов массива больше заданного числа В"
+		<< '\n';
 	unsigned i, T;
 	const  unsigned size = 100;
 	float a[size], B;
 	fstream f, f1;
 	//f - ввод
 	//f1 - вывод
-	cout << "Введите ограничение для элементов(B)1: " << '\n';
+	cout << "Введите ограничение для элементов(B): " << '\n';
 	cin >> B;
 
 	f.open("vvod.txt", ios::in);
@@ -72,7 +78,13 @@ int main()
 using namespace std;
 int main()
 {
+	
 	setlocale(LC_ALL, "Russian");
+	cout << "Здравствуйте, данную лабораторную работ выполнил Гранин Владислав Анатольевич, группа 1309"
+		<< '\n' << "Начало: 17.11.2021 8"
+		<< '\n' << "Задание 4:" << "Версия 4.0.1" << '\n'
+		<< '\n' << "Условие задания: Найти сумму всех элементов массива больше заданного числа В"
+		<< '\n';
 	unsigned i, T;
 	float tmp = 0;
 	float* pA;
@@ -83,7 +95,7 @@ int main()
 	fstream f, f1;
 	cout << "Введите ограничение по значению:" << " ";
 	cin >> B;
-	f.open("vvod.txt", ios::in);
+	f.open("D.vvod.txt", ios::in);
 	if (f.is_open() == 0) {
 		cout << "Error f\n";
 		return 0;
@@ -94,7 +106,7 @@ int main()
 		if (T < 0) {
 			T = 0;
 		}
-		i = 1;
+		i = 0;
 		while (!f.eof()) {
 			f >> tmp;
 			i++;
@@ -103,7 +115,7 @@ int main()
 		pA = new float[T];
 	} f.close();
 
-	f.open("vvod.txt", ios::in);
+	f.open("D.vvod.txt", ios::in);
 	if (f.is_open() == 0) {
 		cout << "Error f\n";
 		return 0;
