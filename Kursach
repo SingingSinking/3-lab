@@ -1,0 +1,171 @@
+#include <iostream>
+#include <fstream>
+#include <cmath>
+#include <string>
+using namespace std;
+
+int Number(char num) {
+    if (num == 48 || num == 49 || num == 50 ||
+        num == 51 || num == 52 || num == 53 ||
+        num == 54 || num == 55 || num == 56 ||
+        num == 57 || num == 45) return 0;//0 - число 1-пробел или таб 2-буквы и мусор 3-переход сроки
+    if (num == 32 || num == 9) return 1;
+    if (num == 10) return 3;
+    return 2;
+}
+
+int FillArray(float x[], float y[], size_t size, int len, ifstream& ReadPoints, ofstream& Protocol, int RealN, int N) {
+    char ch = 48;
+    int b = 0;
+    for (int i = 0; i < len; i++) {
+        while (Number(ch) != 3) {
+            char ch = ReadPoints.get();
+            if (Number(ch) == 3) {//|0 - число или минус| 1-пробел или таб|
+                Protocol << "Встречена пустая строка" << " ";
+                i--;
+                break;
+            }
+            if (Number(ch) == 2) {//|2-буквы и мусор |3-переход сроки|
+                string trash;
+                ReadPoints.seekg(-1, ios::cur);
+                getline(ReadPoints, trash);
+                Protocol << "Cтрока <<" << trash << ">> не подходит для массива";
+                break;
+            }
+            if (Number(ch) == 1) {
+                Protocol << "Пробел" << " ";
+            }
+            if (Number(ch) == 0) {
+                if (ch == 45) ReadPoints.seekg(-1, ios::cur);//Учитываем минус перед числом
+                int space = 0;
+                char cp = ReadPoints.get();
+                while (Number(cp) == 1) {
+                    cp = ReadPoints.get();
+                    space += 1;
+                    //cout<<space<<endl;
+                }
+
+                ReadPoints.seekg(-1, ios::cur);//1-количество пробелов между числами
+                char chislo = ReadPoints.get();
+                if (Number(chislo) == 0) {
+                    ReadPoints.seekg(-2 - space, ios::cur);
+                    ReadPoints >> *(x + size);
+                    ReadPoints >> *(y + size);
+                    b++;
+                    //Protocol<<size<<"    ";
+                    Protocol << " Точка №" << i + 1 << " с координатами (" << *(x + size) << "," << *(y + size) << ")" << " попала в массив" << endl;
+                    i++;
+                    RealN = (++size);
+                    //если следующий символ не перенос строки
+                    char EndFill = ReadPoints.get();
+                    if (Number(EndFill) != 3) {
+                        //ReadPoints.seekg(-1,ios::cur);
+                        string trash;
+                        getline(ReadPoints, trash);
+                        Protocol << "Cимволы <<" << trash << ">> оказались лишними!" << " " << endl;
+                    }
+                    //cout<<"b"<<b<<endl;
+                    if (b >= N) return 0;
+                }
+                else {
+                    ReadPoints.seekg(-3, ios::cur);
+                    string trash;
+                    getline(ReadPoints, trash);
+                    Protocol << "Cтрока <<" << trash << ">> не подходит для массива" << " " << endl;
+                }
+
+            }
+        }
+        Protocol << endl;
+    }
+    cout << "AAA";
+    return 0;
+}
+
+void GiveArray(float x[], float y[], int N, ofstream& output) {
+    cout << "AAA";
+    for (int i = 0; i < N; i++) {
+        output << *(x + i) << " " << *(y + i) << endl;
+    }
+    output << endl;
+}
+
+void is_rigth(float x[], float y[], int N, int x1, int y1, int x2, int y2, int x3, int y3, ofstream& output) {
+    for (int i = 0; i < N; i++) {
+        int a = (x1 - x[i]) * (y2 - y1) - (x2 - x1) * (y1 - y[i]);
+        int b = (x2 - x[i]) * (y3 - y2) - (x3 - x2) * (y2 - y[i]);
+        int c = (x3 - x[i]) * (y1 - y3) - (x1 - x3) * (y3 - y[i]);
+        if (a == 0 || b == 0 || c == 0) {
+            output << "Точка с координатами x[" << x[i] << "], y[" << y[i] << "] лежит на стороне треугольника." << endl;
+        }
+        else output << "Точка с координатами x[" << x[i] << "], y[" << y[i] << "] НЕ лежит на стороне треугольника." << endl;
+    }
+    output << endl;
+}
+void SortArray(float x[], float y[], int N, ofstream& output) {
+    for (int i = 0; N - i >= 2; i++)
+        for (int j = 1; j != N - 1; j++)
+            for (int k = 2; k != N; k++)
+                if (i < j && j < k) {
+                    output << "Для реугольника с точками А(" << x[i] << ", " << y[i] << "), B("
+                        << x[j] << ", " << y[j] << "), C(" << x[k] << ", " << y[k] << "): " << endl;
+                    is_rigth(x, y, N, x[i], y[i], x[j], y[j], x[k], y[k], output);
+                }
+
+}
+
+int main() {
+    setlocale(0, "");
+
+    ifstream ReadPoints("inputKurs.txt");
+    ofstream Protocol("Protocol.txt");
+    ofstream output("outputKurs.txt");
+    if (!ReadPoints.is_open()) {
+        cout << "Файл не удалось открыть";
+        Protocol << "Файл не удалось открыть";
+        output << "Файл не удалось открыть";
+    }
+
+    int N, RealN;
+    ReadPoints >> N;
+    string LastN;
+    getline(ReadPoints, LastN);
+    Protocol << "N:" << N << " " << "Лишняя строка: " << LastN << endl;//лишнии символы протокол
+    if (N <= 0) {
+        N = 0;
+        Protocol << "Введеное число N < 0. N заменено на 0." << endl;
+        return 0;
+    }
+    if (N < 3) {
+        Protocol << "Не достаточно точек для построения треугольника" << endl;
+        output << "Не достаточно точек для построения треугольника" << endl;
+        return 0;
+    }
+    int len = 0;
+    while (!ReadPoints.eof()) {
+        string trash;
+        getline(ReadPoints, trash);
+        len++;
+    }
+    ReadPoints.seekg(0);
+    ReadPoints.ignore(120, '\n');
+    size_t size = 0;//Для указания номера точки в массиве
+    cout << len << endl;
+    float x[N];
+    float y[N];
+    FillArray(x, y, size, len, ReadPoints, Protocol, RealN, N);
+    if (RealN < 3) {
+        Protocol << "Не достаточно точек для построения треугольника" << endl;
+        output << "Не достаточно точек для построения треугольника" << endl;
+        return 0;
+    }
+    if (RealN < N) N = RealN;//Если в файле считалось меньше чем введено N
+    output << "N стало равно " << N << endl << endl;
+    output << "Массив: " << endl;
+    GiveArray(x, y, N, output);
+    SortArray(x, y, N, output);
+    ReadPoints.close();
+    Protocol.close();
+    output.close();
+    return 0;
+}
