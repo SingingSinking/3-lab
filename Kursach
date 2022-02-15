@@ -2,7 +2,8 @@
 #include <fstream>
 #include <cmath>
 #include <string>
-using namespace std;
+
+using namespace std; 
 
 int Number(char num) {
     if (num == 48 || num == 49 || num == 50 ||
@@ -89,25 +90,41 @@ void GiveArray(float x[], float y[], int N, ofstream& output) {
     }
     output << endl;
 }
-
+double length(int x1, int y1, int x2, int y2) {
+    return sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+}
 void is_rigth(float x[], float y[], int N, int x1, int y1, int x2, int y2, int x3, int y3, ofstream& output) {
-    for (int i = 0; i < N; i++) {
-        int a = (x1 - x[i]) * (y2 - y1) - (x2 - x1) * (y1 - y[i]);
-        int b = (x2 - x[i]) * (y3 - y2) - (x3 - x2) * (y2 - y[i]);
-        int c = (x3 - x[i]) * (y1 - y3) - (x1 - x3) * (y3 - y[i]);
-        if (a == 0 || b == 0 || c == 0) {
-            output << "Точка с координатами x[" << x[i] << "], y[" << y[i] << "] лежит на стороне треугольника." << endl;
+    double AB = length(x1, y1, x2, y2), BC = length(x2, y2, x3, y3), AC = length(x1, y1, x3, y3);
+    cout << "AB: " << AB << " " << "BC: " << BC << " " << "AC: " << AC << endl;
+    if ((AB + BC <= AC) || (BC + AC <= AB) || (AB + AC <= BC))
+     {
+        output << "Данного треугольника не существует. " << endl; 
         }
-        else output << "Точка с координатами x[" << x[i] << "], y[" << y[i] << "] НЕ лежит на стороне треугольника." << endl;
+    else {
+        for (int i = 0; i < N; i++) {
+            int a = (x1 - x[i]) * (y2 - y1) - (x2 - x1) * (y1 - y[i]);
+            int b = (x2 - x[i]) * (y3 - y2) - (x3 - x2) * (y2 - y[i]);
+            int c = (x3 - x[i]) * (y1 - y3) - (x1 - x3) * (y3 - y[i]);
+            if ((a == 0 || b == 0 || c == 0) && 
+                 ((( x[i]-x1)*(y2-y1) == (y[i]-y1)*(x2-x1)) && (x[i] >= min(x1, x2)) and (x[i] <= max(x1, x2)) and (y[i] >= min(y1, y2)) and (y[i] <= max(y1, y2)) or
+                 (( x[i]-x2)*(y3-y2) == (y[i]-y2)*(x3-x2)) && (x[i] >= min(x2, x3)) and (x[i] <= max(x2, x3)) and (y[i] >= min(y2, y3)) and (y[i] <= max(y2, y3)) or 
+                 (( x[i]-x3)*(y1-y3) == (y[i]-y3)*(x1-x3)) && (x[i] >= min(x3, x1)) and (x[i] <= max(x3, x1)) and (y[i] >= min(y3, y1)) and (y[i] <= max(y3, y1))))
+                 
+             {
+            
+                output << "Точка с координатами x[" << x[i] << "], y[" << y[i] << "] лежит на стороне треугольника." << endl;
+            }
+            else output << "Точка с координатами x[" << x[i] << "], y[" << y[i] << "] НЕ лежит на стороне треугольника." << endl;
+        } 
     }
-    output << endl;
+    output << endl; 
 }
 void SortArray(float x[], float y[], int N, ofstream& output) {
     for (int i = 0; N - i >= 2; i++)
         for (int j = 1; j != N - 1; j++)
             for (int k = 2; k != N; k++)
                 if (i < j && j < k) {
-                    output << "Для реугольника с точками А(" << x[i] << ", " << y[i] << "), B("
+                    output << "Для треугольника с точками А(" << x[i] << ", " << y[i] << "), B("
                         << x[j] << ", " << y[j] << "), C(" << x[k] << ", " << y[k] << "): " << endl;
                     is_rigth(x, y, N, x[i], y[i], x[j], y[j], x[k], y[k], output);
                 }
@@ -117,7 +134,7 @@ void SortArray(float x[], float y[], int N, ofstream& output) {
 int main() {
     setlocale(0, "");
 
-    ifstream ReadPoints("inputKurs.txt");
+    ifstream ReadPoints("C:/minGw/mingw64/bin/inputKurs.txt");
     ofstream Protocol("Protocol.txt");
     ofstream output("outputKurs.txt");
     if (!ReadPoints.is_open()) {
@@ -128,6 +145,7 @@ int main() {
 
     int N, RealN;
     ReadPoints >> N;
+    cout<<N<<" N"<<endl;
     string LastN;
     getline(ReadPoints, LastN);
     Protocol << "N:" << N << " " << "Лишняя строка: " << LastN << endl;//лишнии символы протокол
@@ -159,6 +177,7 @@ int main() {
         output << "Не достаточно точек для построения треугольника" << endl;
         return 0;
     }
+    cout<<RealN<<" "<<N;
     if (RealN < N) N = RealN;//Если в файле считалось меньше чем введено N
     output << "N стало равно " << N << endl << endl;
     output << "Массив: " << endl;
